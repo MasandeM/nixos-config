@@ -95,7 +95,7 @@ in
   # setup home manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users.masande = import /home/masande/home.nix;
+  home-manager.users.masande = import /home/masande/.nixos-config/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

@@ -104,6 +104,7 @@ in
   #  wget
      neovim
      git
+     xclip
   ];
 
 

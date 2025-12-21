@@ -76,7 +76,16 @@ in
         alacritty
       ];
     };
+
   };
+
+
+  services.libinput = {
+    enable = true;
+    touchpad.naturalScrolling = true;
+    mouse.naturalScrolling = true;
+  };
+
 
   # mount shared folder for UTM hypervisor
   fileSystems."/mnt/share" = {

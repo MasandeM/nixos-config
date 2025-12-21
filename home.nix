@@ -28,4 +28,21 @@
     dmenu
     picom
   ];
+
+  programs.git = {
+    enable = true;
+    
+    settings = {
+      
+      init.defaultBranch = "main";
+      pull.rebase = true;
+
+      user = {
+        name = "Masande";
+        email = "masande.mti@gmail.com";
+      };
+    };
+  };
+
+
 }

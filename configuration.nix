@@ -105,6 +105,7 @@ in
      neovim
      git
      xclip
+     spice-vdagent
   ];
 
 

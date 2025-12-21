@@ -19,6 +19,11 @@
 
       startup = [
         { command = "picom"; }
+        {
+          command = "spice-vdagent";
+          always = true;
+          notification = false;
+        }
       ];
     };
   };

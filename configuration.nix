@@ -49,6 +49,7 @@ in
   services.xserver.xkb = {
     layout = "us";
     variant = "";
+    options = "ctrl:swap_lwin_lctl";
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

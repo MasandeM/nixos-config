@@ -24,6 +24,8 @@ in
   ];
 
   programs.nix-ld.enable = true;
+  
+  programs.zsh.enable = true;
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -57,7 +59,6 @@ in
   services.xserver.xkb = {
     layout = "us";
     variant = "";
-    options = "ctrl:swap_lwin_lctl";
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -65,6 +66,7 @@ in
     isNormalUser = true;
     description = "Masande";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [];
   };
   
@@ -131,6 +133,7 @@ in
     enable = true;
     defaultEditor = true;
   };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

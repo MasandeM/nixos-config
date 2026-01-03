@@ -120,11 +120,13 @@
       ];
     };
   };
+
   home.packages = with pkgs; [
     alacritty
     dmenu
     picom
   ];
+
   programs.git = {
     enable = true;
     settings = {
@@ -136,4 +138,23 @@
       };
     };
   };
+
+
+  programs.zsh = {
+    enable = true;
+
+    # Enable Oh My Zsh
+    oh-my-zsh = {
+      enable = true;
+      theme = "robbyrussell";  # Change this to your preferred theme
+      plugins = [ 
+        "git"
+        "sudo"
+        "docker"
+        "kubectl"
+      ];
+    };
+
+  };
+
 }

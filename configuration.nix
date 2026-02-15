@@ -137,6 +137,7 @@ in
      firefox
      claude-code
      ripgrep
+     gcc
   ];
 
 
@@ -171,19 +172,59 @@ in
     };
 
     plugins.web-devicons.enable = true;
-    plugins.treesitter.enable = true;
+    plugins.treesitter = {
+      enable = true;
+      settings = {
+        ensure_installed = [ "python" "nix" "lua" "bash" "json" ];
+        highlight.enable = true;
+      };
+    };
 
     plugins.lsp = {
       enable = true;
+      keymaps = {
+        lspBuf = {
+          K = "hover";
+          "<leader>rn" = "rename";
+          "<leader>ca" = "code_action";
+        };
+      };
       servers.pyright = {
         enable = true;
       };
-    };
-    
+    }; 
     # progress/spinner indicators
     plugins.fidget = {
       enable = true;
     };
+
+    keymaps = [
+      {
+        key = "gr";
+        action = "<cmd>Telescope lsp_references<CR>";
+        options.desc = "Go to references";
+      }
+      {
+        key = "gd";
+        action = "<cmd>Telescope lsp_definitions<CR>";
+        options.desc = "Go to definition";
+      }
+      { key = "grr"; action = "<Nop>"; }
+      { key = "gra"; action = "<Nop>"; }
+      { key = "grn"; action = "<Nop>"; }
+      { key = "grt"; action = "<Nop>"; }
+      { key = "gri"; action = "<Nop>"; }
+    ];
+
+    extraConfigLua = ''
+      vim.keymap.del("n", "grr")
+      vim.keymap.del("n", "gra")
+      vim.keymap.del("n", "grn")
+      vim.keymap.del("n", "grt")
+      vim.keymap.del("n", "gri")
+      vim.keymap.del("v", "gra")
+    '';
+
   }; 
 
   virtualisation.docker.enable = true;

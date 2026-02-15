@@ -139,7 +139,12 @@
     };
   };
 
-
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+    enableZshIntegration = true; # since you use zsh
+  };
+  
   programs.zsh = {
     enable = true;
 

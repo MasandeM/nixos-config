@@ -5,12 +5,17 @@
 { config, pkgs, callPackage, lib, ... }:
 let 
    home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz;
+   nixvim = import (builtins.fetchGit {
+     url = "https://github.com/nix-community/nixvim";
+     ref = "nixos-25.11";
+   });
 in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       (import "${home-manager}/nixos")
+      nixvim.nixosModules.nixvim 
     ];
 
   # Bootloader.
@@ -22,7 +27,7 @@ in
     "nix-command"
     "flakes"
   ];
-
+  nixpkgs.config.allowUnfree = true;
   programs.nix-ld.enable = true;
   
   programs.zsh.enable = true;
@@ -35,7 +40,9 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  
+  # Disable firewall
+  networking.firewall.enable = false;
   # Set your time zone.
   time.timeZone = "Europe/London";
 
@@ -65,7 +72,7 @@ in
   users.users.masande = {
     isNormalUser = true;
     description = "Masande";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker"];
     shell = pkgs.zsh;
     packages = with pkgs; [];
   };
@@ -122,18 +129,64 @@ in
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-     neovim
      git
      xclip
      spice-vdagent
+     docker-compose
+     openssl
+     firefox
+     claude-code
+     ripgrep
   ];
 
 
-  programs.neovim = {
+  programs.nixvim = {
     enable = true;
     defaultEditor = true;
-  };
 
+    globals.mapleader = " ";
+
+    opts = {
+      number = true;
+      relativenumber = true;
+      shiftwidth = 2;
+    };
+
+    plugins.telescope = {
+      enable = true;
+      keymaps = {
+        "<leader>ff" = {
+          action = "find_files";
+          options.desc = "Find files";
+        };
+        "<leader>fg" = {
+          action = "live_grep";
+          options.desc = "Live grep";
+        };
+        "<leader>fb" = {
+          action = "buffers";
+          options.desc = "Buffers";
+        };
+      };
+    };
+
+    plugins.web-devicons.enable = true;
+    plugins.treesitter.enable = true;
+
+    plugins.lsp = {
+      enable = true;
+      servers.pyright = {
+        enable = true;
+      };
+    };
+    
+    # progress/spinner indicators
+    plugins.fidget = {
+      enable = true;
+    };
+  }; 
+
+  virtualisation.docker.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

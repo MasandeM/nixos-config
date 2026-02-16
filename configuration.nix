@@ -84,7 +84,6 @@ in
   # Use x11 and i3
   services.xserver = {
     enable = true;
-
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -96,7 +95,10 @@ in
     };
 
   };
-
+ 
+  environment.variables = {
+    LIBGL_ALWAYS_SOFTWARE = "1";
+  };
 
   services.libinput = {
     enable = true;
@@ -112,13 +114,14 @@ in
     options = [
       "trans=virtio"
       "version=9p2000.L"
-      "uid=1000"
-      "gid=1000"
-      "mode=0777"
+      "access=any"
+      "nofail"
     ];
   };
 
-
+  systemd.tmpfiles.rules = [
+    "d /mnt/share 0755 masande users -"
+  ];
   # setup home manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;

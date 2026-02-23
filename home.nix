@@ -1,7 +1,16 @@
 { config, pkgs, ... }:
 {
   home.stateVersion = "24.05";
-  programs.i3status.enable = true;
+  programs.i3status = {
+    enable = true;
+    general = {
+      colors = true;
+      color_good = "#A3BE8C";
+      color_degraded = "#EBCB8B";
+      color_bad = "#BF616A";
+    };
+  };
+
   xsession.windowManager.i3 = {
     enable = true;
     config = {
@@ -9,6 +18,87 @@
       terminal = "alacritty";
       focus.followMouse = false;
       focus.mouseWarping = false;
+
+      fonts = {
+        names = [ "JetBrainsMono Nerd Font" ];
+        size = 10.0;
+      };
+
+      gaps = {
+        inner = 8;
+        outer = 4;
+      };
+
+      window = {
+        border = 2;
+        titlebar = false;
+      };
+
+      colors = {
+        focused = {
+          border = "#81A1C1";
+          background = "#81A1C1";
+          text = "#2E3440";
+          indicator = "#88C0D0";
+          childBorder = "#81A1C1";
+        };
+        unfocused = {
+          border = "#3B4252";
+          background = "#3B4252";
+          text = "#D8DEE9";
+          indicator = "#3B4252";
+          childBorder = "#3B4252";
+        };
+        focusedInactive = {
+          border = "#434C5E";
+          background = "#434C5E";
+          text = "#D8DEE9";
+          indicator = "#434C5E";
+          childBorder = "#434C5E";
+        };
+        urgent = {
+          border = "#BF616A";
+          background = "#BF616A";
+          text = "#2E3440";
+          indicator = "#BF616A";
+          childBorder = "#BF616A";
+        };
+      };
+
+      bars = [{
+        position = "bottom";
+        statusCommand = "${pkgs.i3status}/bin/i3status";
+        fonts = {
+          names = [ "JetBrainsMono Nerd Font" ];
+          size = 10.0;
+        };
+        colors = {
+          background = "#2E3440";
+          statusline = "#D8DEE9";
+          separator = "#4C566A";
+          focusedWorkspace = {
+            border = "#81A1C1";
+            background = "#81A1C1";
+            text = "#2E3440";
+          };
+          activeWorkspace = {
+            border = "#434C5E";
+            background = "#434C5E";
+            text = "#D8DEE9";
+          };
+          inactiveWorkspace = {
+            border = "#3B4252";
+            background = "#3B4252";
+            text = "#D8DEE9";
+          };
+          urgentWorkspace = {
+            border = "#BF616A";
+            background = "#BF616A";
+            text = "#2E3440";
+          };
+        };
+      }];
+
       keybindings = let
         mod = "Mod4";
       in {
@@ -112,6 +202,7 @@
       
       startup = [
         { command = "picom"; }
+	{ command = "i3-msg workspace number 1"; }
         {
           command = "spice-vdagent";
           always = true;
@@ -121,8 +212,48 @@
     };
   };
 
+  # Alacritty with Nord theme
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      font = {
+        normal.family = "JetBrainsMono Nerd Font";
+        size = 12;
+      };
+      window = {
+        opacity = 0.92;
+        padding = { x = 8; y = 8; };
+      };
+      colors = {
+        primary = {
+          background = "#2E3440";
+          foreground = "#D8DEE9";
+        };
+        normal = {
+          black = "#3B4252";
+          red = "#BF616A";
+          green = "#A3BE8C";
+          yellow = "#EBCB8B";
+          blue = "#81A1C1";
+          magenta = "#B48EAD";
+          cyan = "#88C0D0";
+          white = "#E5E9F0";
+        };
+        bright = {
+          black = "#4C566A";
+          red = "#BF616A";
+          green = "#A3BE8C";
+          yellow = "#EBCB8B";
+          blue = "#81A1C1";
+          magenta = "#B48EAD";
+          cyan = "#8FBCBB";
+          white = "#ECEFF4";
+        };
+      };
+    };
+  };
+
   home.packages = with pkgs; [
-    alacritty
     dmenu
     picom
   ];
@@ -142,16 +273,15 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-    enableZshIntegration = true; # since you use zsh
+    enableZshIntegration = true;
   };
   
   programs.zsh = {
     enable = true;
 
-    # Enable Oh My Zsh
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell";  # Change this to your preferred theme
+      theme = "robbyrussell";
       plugins = [ 
         "git"
         "sudo"
@@ -163,3 +293,4 @@
   };
 
 }
+
